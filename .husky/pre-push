@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Get the name of the current branch
+branch=$(git branch --show-current)
+
+# Check if the developer is trying to push to main or develop
+if [ "$branch" = "main" ] || [ "$branch" = "develop" ]; then
+  echo "======================================================"
+  echo "🚨 ERROR: Direct pushes to '$branch' are blocked!"
+  echo "👉 Please create a new branch and open a Pull Request."
+  echo "======================================================"
+  exit 1 # This immediately cancels the push
+fi
