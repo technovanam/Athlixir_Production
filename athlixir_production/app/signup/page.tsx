@@ -8,6 +8,7 @@ import {
   User, ArrowRight, Loader2,
   Trophy, Users, Target, Phone, CheckCircle2, X,
 } from "lucide-react";
+import { generateState, generateCodeVerifier, generateCodeChallenge, buildMeriPehchaanSignupUrl } from "@/lib/auth";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -83,18 +84,28 @@ export default function SignupPage() {
     setFormData((prev) => ({ ...prev, [key]: value }));
 
   const handleSendOtp = async () => {
-    if (!formData.phone) return setError("Please enter your phone number first.");
+    if (!formData.fullName) return setError("Please enter your full name.");
+    if (!formData.phone) return setError("Please enter your phone number.");
     setOtpLoading(true);
-    setOtpError("");
+    setError("");
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1200));
-      setOtpSent(true);
-      setOtpDigits(["", "", "", "", "", ""]);
-      set("otp", "");
-      setShowOtpModal(true);
-      setResendTimer(60);
-    } catch {
-      setOtpError("Failed to send OTP. Try again.");
+      const state = generateState(16);
+      const codeVerifier = generateCodeVerifier();
+      const codeChallenge = await generateCodeChallenge(codeVerifier);
+
+      // Store form data to resume after OAuth
+      localStorage.setItem("athlixir_signup_name", formData.fullName);
+      localStorage.setItem("athlixir_signup_phone", formData.phone);
+      localStorage.setItem("athlixir_signup_role", formData.role);
+      
+      localStorage.setItem("athlixir_oauth_state", state);
+      localStorage.setItem("athlixir_oauth_code_verifier", codeVerifier);
+      localStorage.setItem("athlixir_oauth_client_id", "YJ4C9E9B41");
+
+      const url = buildMeriPehchaanSignupUrl({ state, codeChallenge });
+      window.location.href = url;
+    } catch (err: any) {
+      setError(err.message || "Failed to start signup flow");
     } finally {
       setOtpLoading(false);
     }
@@ -428,8 +439,8 @@ export default function SignupPage() {
                     <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
                     <>
-                      Verify Phone
-                      <Phone size={18} />
+                      Sign Up with DigiLocker
+                      <ArrowRight size={18} />
                     </>
                   )}
                 </button>

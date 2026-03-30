@@ -1,85 +1,47 @@
 "use client";
 
-import { useState, useRef, useEffect, FormEvent } from "react";
+
+import { useState, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Loader2, Phone, CheckCircle2, X, Mail, Lock } from "lucide-react";
+import { ArrowRight, Loader2, Phone } from "lucide-react";
+import { buildMeriPehchaanAuthUrl, generateState, generateCodeVerifier, generateCodeChallenge } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
 
-  const [phone, setPhone]                 = useState<string>("");
-  const [phoneVerified, setPhoneVerified] = useState<boolean>(false);
-  const [otpSent, setOtpSent]             = useState<boolean>(false);
-  const [otpLoading, setOtpLoading]       = useState<boolean>(false);
-  const [loading, setLoading]             = useState<boolean>(false);
-  const [showOtpModal, setShowOtpModal]   = useState<boolean>(false);
-  const [otpDigits, setOtpDigits]         = useState<string[]>(["", "", "", "", "", ""]);
-  const [otpError, setOtpError]           = useState<string>("");
-  const [error, setError]                 = useState<string>("");
-  const [resendTimer, setResendTimer]     = useState<number>(0);
+  const [phone, setPhone] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
-  useEffect(() => {
-    if (resendTimer <= 0) return;
-    const t = setTimeout(() => setResendTimer((s) => s - 1), 1000);
-    return () => clearTimeout(t);
-  }, [resendTimer]);
 
-  const otpRefs = [
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-  ];
-
-  const handleSendOtp = async () => {
-    if (!phone || phone.length < 10) return setError("Please enter a valid 10-digit phone number.");
-    setOtpLoading(true);
-    setOtpError("");
-    setError("");
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1200));
-      setOtpSent(true);
-      setOtpDigits(["", "", "", "", "", ""]);
-      setShowOtpModal(true);
-      setResendTimer(60);
-    } catch {
-      setError("Failed to send OTP. Please try again.");
-    } finally {
-      setOtpLoading(false);
-    }
-  };
-
-  const handleVerifyOtp = async () => {
-    const otp = otpDigits.join("");
-    if (otp.length < 6) return setOtpError("Enter all 6 digits.");
-    setOtpLoading(true);
-    setOtpError("");
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setPhoneVerified(true);
-      setShowOtpModal(false);
-    } catch {
-      setOtpError("Invalid OTP. Please try again.");
-    } finally {
-      setOtpLoading(false);
-    }
-  };
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  // OAuth login handler
+  const handleOAuthLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!phoneVerified) return setError("Please verify your phone number first.");
-    setLoading(true);
     setError("");
+    if (!phone || phone.length < 10) {
+      setError("Please enter a valid 10-digit phone number.");
+      return;
+    }
+    setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1200));
+      const state = generateState(16);
+      const codeVerifier = generateCodeVerifier();
+      const codeChallenge = await generateCodeChallenge(codeVerifier);
+
+      const clientId = process.env.NEXT_PUBLIC_MERIPEHCHAAN_CLIENT_ID || "";
+      if (!clientId) throw new Error("OAuth client ID not configured");
+      
       localStorage.setItem("athlixir_login_phone", phone);
-      router.push("/dashboard");
-    } catch {
-      setError("Something went wrong. Please try again.");
+      localStorage.setItem("athlixir_oauth_state", state);
+      localStorage.setItem("athlixir_oauth_code_verifier", codeVerifier);
+      localStorage.setItem("athlixir_oauth_client_id", clientId);
+
+      const url = buildMeriPehchaanAuthUrl({ clientId, state, codeChallenge });
+      window.location.href = url;
+    } catch (err: any) {
+      setError(err.message || "Failed to start login");
     } finally {
       setLoading(false);
     }
@@ -88,119 +50,6 @@ export default function LoginPage() {
   return (
     <div className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-background">
 
-      {/* OTP Modal */}
-      <AnimatePresence>
-        {showOtpModal && (
-          <motion.div
-            key="otp-modal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4"
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="relative w-full bg-black/80 backdrop-blur-3xl border border-white/10 rounded-3xl p-8 shadow-[0_0_60px_rgba(0,0,0,0.8)]" style={{ maxWidth: "360px" }}
-            >
-              <button
-                type="button"
-                onClick={() => { setShowOtpModal(false); setOtpError(""); }}
-                className="absolute top-5 right-5 text-gray-500 hover:text-white transition-colors"
-              >
-                <X size={20} />
-              </button>
-
-              <div className="flex justify-center mb-4">
-                <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                  <Phone size={26} className="text-primary" />
-                </div>
-              </div>
-
-              <h2 className="text-white font-black text-xl uppercase tracking-widest text-center mb-1">
-                Verify Phone
-              </h2>
-              <p className="text-gray-500 text-[11px] text-center uppercase tracking-widest mb-6">
-                Enter the 6-digit OTP sent to<br />
-                <span className="text-primary font-bold">+91 {phone}</span>
-              </p>
-
-              <div className="flex justify-center gap-3 mb-4">
-                {otpDigits.map((digit, i) => (
-                  <input
-                    key={i}
-                    ref={otpRefs[i]}
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={1}
-                    value={digit}
-                    onChange={(e) => {
-                      const val = e.target.value.replace(/\D/g, "");
-                      const next = [...otpDigits];
-                      next[i] = val;
-                      setOtpDigits(next);
-                      setOtpError("");
-                      if (val && i < 5) otpRefs[i + 1].current?.focus();
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Backspace" && !otpDigits[i] && i > 0) {
-                        otpRefs[i - 1].current?.focus();
-                      }
-                    }}
-                    onPaste={(e) => {
-                      e.preventDefault();
-                      const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
-                      const next = ["", "", "", "", "", ""];
-                      pasted.split("").forEach((ch, idx) => { if (idx < 6) next[idx] = ch; });
-                      setOtpDigits(next);
-                      otpRefs[Math.min(pasted.length, 5)].current?.focus();
-                    }}
-                    disabled={otpLoading}
-                    suppressHydrationWarning
-                    className="w-10 h-10 text-center text-xl font-black text-white bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:border-primary focus:bg-white/[0.08] transition-all"
-                  />
-                ))}
-              </div>
-
-              {otpError && (
-                <p className="text-error text-[10px] font-bold uppercase tracking-widest text-center mb-4">
-                  {otpError}
-                </p>
-              )}
-
-              <button
-                type="button"
-                onClick={handleVerifyOtp}
-                disabled={otpLoading || otpDigits.join("").length < 6}
-                suppressHydrationWarning
-                className="w-3/4 mx-auto py-4 bg-primary hover:bg-orange-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest rounded-2xl transition-all flex items-center justify-center gap-2 shadow-[0_10px_30px_rgba(255,87,34,0.3)]"
-              >
-                {otpLoading ? <Loader2 size={18} className="animate-spin" /> : "Verify OTP"}
-              </button>
-
-              <p className="text-center text-gray-600 text-[10px] uppercase tracking-widest mt-4">
-                Didn&apos;t receive?{" "}
-                {resendTimer > 0 ? (
-                  <span className="text-primary font-black">
-                    Resend in {Math.floor(resendTimer / 60)}:{String(resendTimer % 60).padStart(2, "0")}
-                  </span>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleSendOtp}
-                    disabled={otpLoading}
-                    className="text-primary font-black hover:text-orange-400 transition-colors"
-                  >
-                    Resend
-                  </button>
-                )}
-              </p>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
@@ -210,7 +59,7 @@ export default function LoginPage() {
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
+        <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-black/40" />
       </div>
 
       {/* Back to Home */}
@@ -232,7 +81,7 @@ export default function LoginPage() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
-        className="w-full max-w-[480px] px-6 relative z-10"
+        className="w-full max-w-120 px-6 relative z-10"
       >
         {/* Header */}
         <div className="flex flex-col items-center mb-8">
@@ -270,13 +119,13 @@ export default function LoginPage() {
             )}
           </AnimatePresence>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleOAuthLogin} className="space-y-8">
             {/* Phone Field */}
             <div className="space-y-3">
               <label className="text-xs font-black uppercase tracking-[0.2em] text-gray-500 ml-1">
                 Phone Number
               </label>
-              <div className="relative group flex items-center bg-white/5 border border-white/10 rounded-lg focus-within:border-primary/50 focus-within:bg-white/[0.08] transition-all overflow-hidden">
+              <div className="relative group flex items-center bg-white/5 border border-white/10 rounded-lg focus-within:border-primary/50 focus-within:bg-white/8 transition-all overflow-hidden">
                 <div className="pl-5 pr-3 flex items-center pointer-events-none text-gray-600 group-focus-within:text-primary transition-colors shrink-0">
                   <Phone size={20} />
                 </div>
@@ -293,60 +142,32 @@ export default function LoginPage() {
                   onChange={(e) => {
                     const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
                     setPhone(digits);
-                    setPhoneVerified(false);
-                    setOtpSent(false);
                     setError("");
                   }}
                   required
-                  disabled={loading || phoneVerified}
+                  disabled={loading}
                   suppressHydrationWarning
                 />
-                {phoneVerified && (
-                  <div className="pr-4 flex items-center shrink-0">
-                    <span className="flex items-center gap-1.5 text-green-400 text-[10px] font-black uppercase tracking-widest">
-                      <CheckCircle2 size={16} />
-                      Verified
-                    </span>
-                  </div>
-                )}
+                {/* No phoneVerified badge in OAuth flow */}
               </div>
             </div>
 
             {/* Submit / Verify Button */}
-            {!phoneVerified ? (
-              <button
-                type="button"
-                onClick={handleSendOtp}
-                disabled={otpLoading || phone.length < 10}
-                suppressHydrationWarning
-                className="w-full py-4 bg-primary text-white font-bold rounded-lg hover:bg-orange-600 transition-all shadow-[0_10px_30px_rgba(255,87,34,0.3)] hover:shadow-[0_15px_40px_rgba(255,87,34,0.5)] flex items-center justify-center gap-3 group mt-4 uppercase tracking-widest text-base disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {otpLoading ? (
-                  <Loader2 className="w-6 h-6 animate-spin" />
-                ) : (
-                  <>
-                    Verify Phone
-                    <Phone size={20} className="group-hover:scale-110 transition-transform" />
-                  </>
-                )}
-              </button>
-            ) : (
-              <button
-                type="submit"
-                disabled={loading}
-                suppressHydrationWarning
-                className="w-full py-4 bg-primary text-white font-bold rounded-lg hover:bg-orange-600 transition-all shadow-[0_10px_30px_rgba(255,87,34,0.3)] hover:shadow-[0_15px_40px_rgba(255,87,34,0.5)] flex items-center justify-center gap-3 group mt-4 uppercase tracking-widest text-base disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <Loader2 className="w-6 h-6 animate-spin" />
-                ) : (
-                  <>
-                    Enter Athlixir
-                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                  </>
-                )}
-              </button>
-            )}
+            <button
+              type="submit"
+              disabled={loading || phone.length < 10}
+              suppressHydrationWarning
+              className="w-full py-4 bg-primary text-white font-bold rounded-lg hover:bg-orange-600 transition-all shadow-[0_10px_30px_rgba(255,87,34,0.3)] hover:shadow-[0_15px_40px_rgba(255,87,34,0.5)] flex items-center justify-center gap-3 group mt-4 uppercase tracking-widest text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? (
+                <Loader2 className="w-6 h-6 animate-spin" />
+              ) : (
+                <>
+                  Continue / Login
+                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
+            </button>
           </form>
         </div>
 
