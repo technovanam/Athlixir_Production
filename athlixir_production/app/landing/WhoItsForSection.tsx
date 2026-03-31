@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { User, Trophy, BookOpen } from 'lucide-react';
+import Image from 'next/image';
 
 const WhoItsForSection = () => {
   const audiences = [
@@ -42,7 +43,7 @@ const WhoItsForSection = () => {
           className="text-center mb-16 md:mb-28"
         >
           <div className="inline-flex px-5 py-2 rounded-full border border-primary/30 bg-primary/10 text-[11px] font-bold uppercase tracking-[0.25em] mb-6 text-primary backdrop-blur-sm">
-            Who It's For
+            Who It&apos;s For
           </div>
           <h2 className="text-4xl md:text-6xl font-black text-white mt-4 tracking-tight leading-[1.1]">
             Empowering the Entire <br />
@@ -62,10 +63,11 @@ const WhoItsForSection = () => {
             >
               {/* Background Image */}
               <div className="absolute inset-0">
-                <img
+                <Image
                   src={item.bgImage}
                   alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-30 group-hover:opacity-40"
+                  fill
+                  className="object-cover transition-transform duration-1000 group-hover:scale-110 opacity-30 group-hover:opacity-40"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
               </div>

@@ -143,7 +143,7 @@ export default function HeroSection() {
           className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-5"
         >
           <Link
-            href="/signup"
+            href="/login"
             className="group px-10 py-4 bg-primary text-white font-bold rounded-full hover:bg-primary-hover transition-all shadow-[0_0_20px_rgba(255,87,34,0.4)] text-sm uppercase tracking-widest hover:scale-105 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
             aria-label="Sign up to get started with Athlixir"
           >
