@@ -36,9 +36,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
-      - name: Run Linter
+      - name: Run Linter (Mandatory)
         run: npm run lint
-        continue-on-error: true # Report but don't block yet if needed, though usually strict is better
+
+      - name: TypeScript Type Check (Strict)
+        run: npm run type-check
+
+      - name: Security Audit (Review Only)
+        run: npm audit --audit-level=high || true
 
       - name: Run Mandatory Tests
         run: npm test
