@@ -84,8 +84,12 @@ export function StyledSelect({ value, onChange, children, disabled }: StyledSele
 
   // Auto-focus search when opening
   useEffect(() => {
-    if (open) setTimeout(() => searchRef.current?.focus(), 50);
-    else setQuery("");
+    if (open) {
+      setTimeout(() => searchRef.current?.focus(), 50);
+    } else {
+      // Use a brief timeout to avoid synchronous setState warnings in effects
+      setTimeout(() => setQuery(""), 0);
+    }
   }, [open]);
 
   function select(val: string) {
