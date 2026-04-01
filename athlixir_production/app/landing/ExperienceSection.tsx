@@ -55,6 +55,7 @@ const ExperienceSection = () => {
               transition={{ delay: index * 0.1 }}
               className="min-w-[320px] md:min-w-[420px] h-[550px] relative rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10 group bg-white/[0.02]"
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={card.img}
                 alt={card.title}

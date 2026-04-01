@@ -206,6 +206,7 @@ export default function EventsPage() {
   const [bookmarks, setBookmarks] = useState([]);
   const [mounted, setMounted] = useState(false);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setMounted(true); }, []);
 
   const filtered = useMemo(() => {
