@@ -204,11 +204,11 @@ export default function EventsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [detailId, setDetailId] = useState(null);
   const [bookmarks, setBookmarks] = useState([]);
-  const [modalRoot, setModalRoot] = useState(null);
+  const modalRoot = useRef<Element | null>(null);
   const topRef = useRef(null);
 
   useEffect(() => {
-    setModalRoot(document.getElementById("modal-root"));
+    modalRoot.current = document.getElementById("modal-root");
   }, []);
 
   const filtered = useMemo(() => {
@@ -370,7 +370,7 @@ export default function EventsPage() {
       </div>
 
       {/* Modal portal into #modal-root (outside body transform stacking context) */}
-      {modalRoot && createPortal(
+      {modalRoot.current && createPortal(
         <AnimatePresence>
           {detailEvent && (
             <motion.div

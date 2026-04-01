@@ -51,7 +51,7 @@ export default function SignupPage() {
 
   const [error, setError]           = useState<string>("");
   const [loading, setLoading]       = useState<boolean>(false);
-  const [otpSent, setOtpSent]       = useState<boolean>(false);
+  const [, setOtpSent]       = useState<boolean>(false);
   const [otpLoading, setOtpLoading] = useState<boolean>(false);
   const [phoneVerified, setPhoneVerified] = useState<boolean>(false);
   const [otpError, setOtpError]     = useState<string>("");

@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Shield, Check, Zap, Play } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { Shield, Check, Zap } from "lucide-react";
+import { useRef } from "react";
 
 export default function HeroSection() {
 

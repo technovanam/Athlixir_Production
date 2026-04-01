@@ -4,14 +4,14 @@ import { useState, useRef, useEffect, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Loader2, Phone, CheckCircle2, X, Mail, Lock } from "lucide-react";
+import { ArrowRight, Loader2, Phone, CheckCircle2, X } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
 
   const [phone, setPhone]                 = useState<string>("");
   const [phoneVerified, setPhoneVerified] = useState<boolean>(false);
-  const [otpSent, setOtpSent]             = useState<boolean>(false);
+  const [, setOtpSent]             = useState<boolean>(false);
   const [otpLoading, setOtpLoading]       = useState<boolean>(false);
   const [loading, setLoading]             = useState<boolean>(false);
   const [showOtpModal, setShowOtpModal]   = useState<boolean>(false);

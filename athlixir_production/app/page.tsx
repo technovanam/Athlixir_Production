@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import Header from "./landing/Header";
 import HeroSection from "./landing/HeroSection";
 import AboutSection from "./landing/AboutSection";
