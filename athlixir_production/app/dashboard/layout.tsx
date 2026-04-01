@@ -19,19 +19,19 @@ import {
 } from "lucide-react";
 
 const NAV_ITEMS = [
-  { label: "Dashboard", href: "/Dashboard", icon: LayoutDashboard },
-  { label: "Performance", href: "/Dashboard/performance", icon: Activity },
-  { label: "Events", href: "/Dashboard/events", icon: Calendar },
-  { label: "Recovery", href: "/Dashboard/recovery", icon: Flame },
-  { label: "Leaderboard", href: "/Dashboard/leaderboard", icon: Trophy },
-  { label: "Opportunities", href: "/Dashboard/opportunities", icon: Briefcase },
-  { label: "Sponsorship", href: "/Dashboard/sponsorship", icon: DollarSign },
-  { label: "Messages", href: "/Dashboard/messages", icon: MessageSquare },
+  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Performance", href: "/dashboard/performance", icon: Activity },
+  { label: "Events", href: "/dashboard/events", icon: Calendar },
+  { label: "Recovery", href: "/dashboard/recovery", icon: Flame },
+  { label: "Leaderboard", href: "/dashboard/leaderboard", icon: Trophy },
+  { label: "Opportunities", href: "/dashboard/opportunities", icon: Briefcase },
+  { label: "Sponsorship", href: "/dashboard/Funding", icon: DollarSign },
+  { label: "Messages", href: "/dashboard/messages", icon: MessageSquare },
 ];
 
 const BOTTOM_ITEMS = [
-  { label: "Profile", href: "/Dashboard/profile", icon: User },
-  { label: "Settings", href: "/Dashboard/settings", icon: Settings },
+  { label: "Profile", href: "/dashboard/profile", icon: User },
+  { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
 export default function DashboardLayout({
