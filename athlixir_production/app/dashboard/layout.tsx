@@ -25,7 +25,7 @@ const NAV_ITEMS = [
   { label: "Recovery", href: "/dashboard/recovery", icon: Flame },
   { label: "Leaderboard", href: "/dashboard/leaderboard", icon: Trophy },
   { label: "Opportunities", href: "/dashboard/opportunities", icon: Briefcase },
-  { label: "Sponsorship", href: "/dashboard/Funding", icon: DollarSign },
+  { label: "Sponsorship", href: "/dashboard/funding", icon: DollarSign },
   { label: "Messages", href: "/dashboard/messages", icon: MessageSquare },
 ];
 
