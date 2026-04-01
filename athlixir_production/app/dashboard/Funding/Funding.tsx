@@ -218,6 +218,7 @@ export default function SponsorshipFundingPage() {
           <div style={s.sponsorGrid}>
             {GOV_SPONSORS.map((sp) => (
               <div key={sp.name} style={s.sponsorCard}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={sp.img} alt={sp.name} style={s.sponsorImg} />
                 <div>
                   <p style={s.sponsorName}>{sp.name}</p>
@@ -237,6 +238,7 @@ export default function SponsorshipFundingPage() {
           <div style={s.sponsorGrid}>
             {PRIVATE_SPONSORS.map((sp) => (
               <div key={sp.name} style={s.sponsorCard}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={sp.img} alt={sp.name} style={s.sponsorImg} />
                 <div>
                   <p style={s.sponsorName}>{sp.name}</p>

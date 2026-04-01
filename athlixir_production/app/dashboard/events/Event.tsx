@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -204,12 +204,9 @@ export default function EventsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [detailId, setDetailId] = useState(null);
   const [bookmarks, setBookmarks] = useState([]);
-  const modalRoot = useRef<Element | null>(null);
-  const topRef = useRef(null);
+  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    modalRoot.current = document.getElementById("modal-root");
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
   const filtered = useMemo(() => {
     return EVENTS.filter((ev) => {
@@ -231,8 +228,6 @@ export default function EventsPage() {
 
   return (
     <div className="space-y-8 pb-12 max-w-6xl mx-auto">
-      <div ref={topRef} />
-
       {/* Header */}
       <header>
         <h1 className="text-2xl font-bold text-white/95 flex items-center gap-2">
@@ -370,7 +365,7 @@ export default function EventsPage() {
       </div>
 
       {/* Modal portal into #modal-root (outside body transform stacking context) */}
-      {modalRoot.current && createPortal(
+      {mounted && createPortal(
         <AnimatePresence>
           {detailEvent && (
             <motion.div
@@ -391,6 +386,7 @@ export default function EventsPage() {
               >
                 {/* Image */}
                 <div style={{ position: "relative", height: 175, flexShrink: 0 }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={detailEvent.image} alt={detailEvent.title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                   <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, #111 0%, transparent 55%)" }} />
                   <div style={{ position: "absolute", bottom: 12, left: 16, display: "flex", gap: 6 }}>
@@ -452,7 +448,7 @@ export default function EventsPage() {
             </motion.div>
           )}
         </AnimatePresence>,
-        modalRoot
+        document.body
       )}
     </div>
   );

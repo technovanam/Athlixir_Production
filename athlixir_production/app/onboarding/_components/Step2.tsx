@@ -7,7 +7,6 @@ import { FormState, CURRENT_LEVELS, PREFERRED_TRAINING_TYPES, SPORT_CATEGORIES, 
 
 interface Step2Props {
   form: FormState;
-  showDominantHand: boolean;
   updateField: <K extends keyof FormState>(key: K, value: FormState[K]) => void;
   saving: boolean;
   onBack: () => void;

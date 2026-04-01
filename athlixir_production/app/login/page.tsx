@@ -204,6 +204,7 @@ export default function LoginPage() {
 
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=1305&auto=format&fit=crop"
           alt="Athlete Background"

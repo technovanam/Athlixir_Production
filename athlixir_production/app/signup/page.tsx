@@ -260,6 +260,7 @@ export default function SignupPage() {
 
       {/* Background */}
       <div className="absolute inset-0 z-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80"
           alt="Athlete Training"
