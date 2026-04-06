@@ -106,6 +106,18 @@ export default function SignupPage() {
       window.location.href = url;
     } catch (err: any) {
       setError(err.message || "Failed to start signup flow");
+    if (!formData.phone) return setError("Please enter your phone number first.");
+    setOtpLoading(true);
+    setOtpError("");
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+      setOtpSent(true);
+      setOtpDigits(["", "", "", "", "", ""]);
+      set("otp", "");
+      setShowOtpModal(true);
+      setResendTimer(60);
+    } catch {
+      setOtpError("Failed to send OTP. Try again.");
     } finally {
       setOtpLoading(false);
     }
@@ -441,6 +453,8 @@ export default function SignupPage() {
                     <>
                       Sign Up with DigiLocker
                       <ArrowRight size={18} />
+                      Verify Phone
+                      <Phone size={18} />
                     </>
                   )}
                 </button>

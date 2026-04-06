@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { ArrowRight, Microscope, Quote } from 'lucide-react';
+import Image from 'next/image';
 
 const ResearchSection = () => {
   return (
@@ -18,10 +19,12 @@ const ResearchSection = () => {
           transition={{ duration: 1, ease: "easeOut" }}
           className="relative rounded-[2.5rem] overflow-hidden shadow-2xl h-[550px] border border-white/10 group"
         >
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?auto=format&fit=crop&q=80"
             alt="Athlete Analyzing Data"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-1000"
+            priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
 
@@ -69,7 +72,7 @@ const ResearchSection = () => {
           </div>
 
           <p className="text-gray-400 text-lg leading-relaxed font-light max-w-lg">
-            We aren't just building an app; we're building a standard for athletic excellence across Tier-2 and Tier-3 cities.
+            We aren&apos;t just building an app; we&apos;re building a standard for athletic excellence across Tier-2 and Tier-3 cities.
           </p>
 
           <button className="px-10 py-4 bg-transparent border border-white/20 text-white font-bold rounded-full hover:border-primary hover:text-primary transition-all text-xs uppercase tracking-widest flex items-center space-x-3 group w-fit">
