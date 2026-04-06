@@ -1,21 +1,41 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { Message } from '../types';
+
+type MessageReceivePayload = {
+  id: string;
+  senderId: string;
+  senderName?: string;
+  conversationId: string;
+  text: string;
+  timestamp: string;
+};
+
+type MessageDeliveredPayload = { messageId: string; conversationId: string };
+
+type MessageOfflinePayload = {
+  conversationId: string;
+  recipientId: string;
+  messageId: string;
+};
+
+type ReadReceiptEventPayload = { conversationId: string; messageId: string; readBy: string };
+
+type UserStatusPayload = { userId: string; userName?: string; isOnline: boolean };
+
+type TypingStatusPayload = {
+  conversationId: string;
+  userId?: string;
+  userName: string;
+  isTyping: boolean;
+};
 
 const SOCKET_URL = process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:3001';
 
 interface UseMessagingWebSocketOptions {
-  onMessageReceive?: (message: {
-    id: string;
-    senderId: string;
-    senderName?: string;
-    conversationId: string;
-    text: string;
-    timestamp: string;
-  }) => void;
-  onMessageDelivered?: (payload: { messageId: string; conversationId: string }) => void;
-  onMessageOffline?: (payload: { conversationId: string; recipientId: string; messageId: string }) => void;
-  onReadReceipt?: (payload: { conversationId: string; messageId: string; readBy: string }) => void;
+  onMessageReceive?: (message: MessageReceivePayload) => void;
+  onMessageDelivered?: (payload: MessageDeliveredPayload) => void;
+  onMessageOffline?: (payload: MessageOfflinePayload) => void;
+  onReadReceipt?: (payload: ReadReceiptEventPayload) => void;
   onDiscoverList?: (users: { id: string; name: string; isOnline: boolean }[]) => void;
 }
 
@@ -97,19 +117,19 @@ export function useMessagingWebSocket(
 
     // ─── Message Events ──────────────────────────
 
-    socket.on('message:receive', (message: any) => {
+    socket.on('message:receive', (message: MessageReceivePayload) => {
       optionsRef.current.onMessageReceive?.(message);
     });
 
-    socket.on('message:delivered', (payload: any) => {
+    socket.on('message:delivered', (payload: MessageDeliveredPayload) => {
       optionsRef.current.onMessageDelivered?.(payload);
     });
 
-    socket.on('message:offline', (payload: any) => {
+    socket.on('message:offline', (payload: MessageOfflinePayload) => {
       optionsRef.current.onMessageOffline?.(payload);
     });
 
-    socket.on('message:read-receipt', (payload: any) => {
+    socket.on('message:read-receipt', (payload: ReadReceiptEventPayload) => {
       optionsRef.current.onReadReceipt?.(payload);
     });
 
@@ -124,7 +144,7 @@ export function useMessagingWebSocket(
       optionsRef.current.onDiscoverList?.(users);
     });
 
-    socket.on('user:status', ({ userId: uid, isOnline }: any) => {
+    socket.on('user:status', ({ userId: uid, isOnline }: UserStatusPayload) => {
       setOnlineUsers((prev) =>
         isOnline
           ? [...new Set([...prev, uid])]
@@ -134,7 +154,7 @@ export function useMessagingWebSocket(
 
     // ─── Typing Events ──────────────────────────
 
-    socket.on('typing:status', ({ conversationId, userName: name, isTyping }: any) => {
+    socket.on('typing:status', ({ conversationId, userName: name, isTyping }: TypingStatusPayload) => {
       setTypingUsers((prev) => {
         const next = new Map(prev);
         if (isTyping) {
