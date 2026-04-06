@@ -4,7 +4,7 @@
 
 :root {
   /* ================= FONT ================= */
-  --font-primary: "Archivo SemiExpanded", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-primary: var(--font-poppins), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   /* Font Weights */
   --fw-light:    300;
@@ -99,7 +99,7 @@
   --color-info:    #3B82F6;
 
   /* Font */
-  --font-sans: "Archivo SemiExpanded", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: var(--font-poppins), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 /* ===== Base Typography ===== */
@@ -117,3 +117,23 @@ h1, h2, h3, h4, h5, h6 {
   line-height: var(--lh-heading);
   letter-spacing: var(--ls-heading);
 }
+
+/* ===== Custom Scrollbar (Matches Design) ===== */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d1d6;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+}
+
