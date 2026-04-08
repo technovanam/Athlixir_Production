@@ -3,11 +3,10 @@
 import { motion } from "framer-motion";
 import { Dumbbell, ChevronLeft, ChevronRight, Loader2, Star } from "lucide-react";
 import { FieldLabel, SectionCard, inputCls, StyledSelect } from "./shared";
-import { FormState, CURRENT_LEVELS, PREFERRED_TRAINING_TYPES, DISABILITY_CATEGORIES, SPORT_CATEGORIES, SPORTS_LIST } from "./types";
+import { FormState, CURRENT_LEVELS, PREFERRED_TRAINING_TYPES, SPORT_CATEGORIES, SPORTS_LIST } from "./types";
 
 interface Step2Props {
   form: FormState;
-  showDominantHand: boolean;
   updateField: <K extends keyof FormState>(key: K, value: FormState[K]) => void;
   saving: boolean;
   onBack: () => void;
@@ -16,7 +15,6 @@ interface Step2Props {
 
 export function Step2({
   form,
-  showDominantHand,
   updateField,
   saving,
   onBack,

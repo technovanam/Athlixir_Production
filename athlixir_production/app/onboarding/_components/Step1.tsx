@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { User, ChevronRight, Loader2 } from "lucide-react";
 import { FieldLabel, SectionCard, inputCls, StyledSelect } from "./shared";
 import { DatePicker } from "./DatePicker";
-import { FormState, BLOOD_GROUPS, INDIAN_STATES, STATE_DISTRICTS, DISTRICT_CITIES, SPORTS_LIST, SPORT_CATEGORIES, CURRENT_LEVELS } from "./types";
+import { FormState, BLOOD_GROUPS, INDIAN_STATES, STATE_DISTRICTS, DISTRICT_CITIES } from "./types";
 
 // ---------------------------------------------------------------------------
 // Named export: Personal Info Step (used by onboarding/page.tsx)

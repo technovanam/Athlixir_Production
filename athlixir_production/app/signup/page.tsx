@@ -51,7 +51,7 @@ export default function SignupPage() {
 
   const [error, setError]           = useState<string>("");
   const [loading, setLoading]       = useState<boolean>(false);
-  const [otpSent, setOtpSent]       = useState<boolean>(false);
+  const [, setOtpSent]       = useState<boolean>(false);
   const [otpLoading, setOtpLoading] = useState<boolean>(false);
   const [phoneVerified, setPhoneVerified] = useState<boolean>(false);
   const [otpError, setOtpError]     = useState<string>("");
@@ -260,6 +260,7 @@ export default function SignupPage() {
 
       {/* Background */}
       <div className="absolute inset-0 z-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80"
           alt="Athlete Training"
