@@ -1,5 +1,6 @@
 "use client";
 
+
 import { useState, useRef, useEffect, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -9,7 +10,7 @@ import { ArrowRight, Loader2, Phone, CheckCircle2, X } from "lucide-react";
 export default function LoginPage() {
   const router = useRouter();
 
-  const [phone, setPhone]                 = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
   const [phoneVerified, setPhoneVerified] = useState<boolean>(false);
   const [, setOtpSent]             = useState<boolean>(false);
   const [otpLoading, setOtpLoading]       = useState<boolean>(false);
@@ -68,6 +69,8 @@ export default function LoginPage() {
       setOtpLoading(false);
     }
   };
+
+
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -211,6 +214,7 @@ export default function LoginPage() {
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/70" />
+        <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-black/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
       </div>
 
@@ -313,41 +317,43 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Submit / Verify Button */}
-            {!phoneVerified ? (
-              <button
-                type="button"
-                onClick={handleSendOtp}
-                disabled={otpLoading || phone.length < 10}
-                suppressHydrationWarning
-                className="w-full py-4 bg-primary text-white font-bold rounded-lg hover:bg-orange-600 transition-all shadow-[0_10px_30px_rgba(255,87,34,0.3)] hover:shadow-[0_15px_40px_rgba(255,87,34,0.5)] flex items-center justify-center gap-3 group mt-4 uppercase tracking-widest text-base disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {otpLoading ? (
-                  <Loader2 className="w-6 h-6 animate-spin" />
-                ) : (
-                  <>
-                    Verify Phone
-                    <Phone size={20} className="group-hover:scale-110 transition-transform" />
-                  </>
-                )}
-              </button>
-            ) : (
-              <button
-                type="submit"
-                disabled={loading}
-                suppressHydrationWarning
-                className="w-full py-4 bg-primary text-white font-bold rounded-lg hover:bg-orange-600 transition-all shadow-[0_10px_30px_rgba(255,87,34,0.3)] hover:shadow-[0_15px_40px_rgba(255,87,34,0.5)] flex items-center justify-center gap-3 group mt-4 uppercase tracking-widest text-base disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <Loader2 className="w-6 h-6 animate-spin" />
-                ) : (
-                  <>
-                    Enter Athlixir
-                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                  </>
-                )}
-              </button>
-            )}
+            <div className="flex flex-col gap-4 mt-8">
+              {!phoneVerified ? (
+                <button
+                  type="button"
+                  onClick={handleSendOtp}
+                  disabled={otpLoading || phone.length < 10}
+                  suppressHydrationWarning
+                  className="w-full py-4 bg-primary text-white font-bold rounded-lg hover:bg-orange-600 transition-all shadow-[0_10px_30px_rgba(255,87,34,0.3)] hover:shadow-[0_15px_40px_rgba(255,87,34,0.5)] flex items-center justify-center gap-3 group uppercase tracking-widest text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {otpLoading ? (
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  ) : (
+                    <>
+                      Verify Phone
+                      <Phone size={20} className="group-hover:scale-110 transition-transform" />
+                    </>
+                  )}
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={loading}
+                  suppressHydrationWarning
+                  className="w-full py-4 bg-primary text-white font-bold rounded-lg hover:bg-orange-600 transition-all shadow-[0_10px_30px_rgba(255,87,34,0.3)] hover:shadow-[0_15px_40px_rgba(255,87,34,0.5)] flex items-center justify-center gap-3 group uppercase tracking-widest text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? (
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  ) : (
+                    <>
+                      Enter Athlixir
+                      <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </button>
+              )}
+
+            </div>
           </form>
         </div>
 
