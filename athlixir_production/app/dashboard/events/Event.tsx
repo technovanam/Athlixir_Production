@@ -93,8 +93,8 @@ const EVENTS = [
   },
 ];
 
-function getStatusColor(status) {
-  const map = {
+function getStatusColor(status: string): string {
+  const map: Record<string, string> = {
     "Open": "bg-emerald-500/10 text-emerald-500",
     "Closing Soon": "bg-amber-500/10 text-amber-500",
     "Invite Only": "bg-purple-500/10 text-purple-500",
@@ -103,8 +103,8 @@ function getStatusColor(status) {
   return map[status] || "bg-gray-500/10 text-gray-500";
 }
 
-function getTypeColor(type) {
-  const map = {
+function getTypeColor(type: string): string {
+  const map: Record<string, string> = {
     "Competition": "bg-blue-500/10 text-blue-400",
     "Trial": "bg-orange-500/10 text-orange-400",
     "Workshop": "bg-teal-500/10 text-teal-400",
@@ -118,7 +118,7 @@ const inputClass = "w-full bg-white/[0.06] border border-white/[0.08] rounded-lg
 
 const featuredEvents = EVENTS.filter((e) => e.featured);
 
-function FeaturedSlider({ onSelect }) {
+function FeaturedSlider({ onSelect }: { onSelect: (id: number) => void }) {
   const [idx, setIdx] = useState(0);
 
   useEffect(() => {
@@ -202,8 +202,8 @@ function FeaturedSlider({ onSelect }) {
 export default function EventsPage() {
   const [typeFilter, setTypeFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [detailId, setDetailId] = useState(null);
-  const [bookmarks, setBookmarks] = useState([]);
+  const [detailId, setDetailId] = useState<number | null>(null);
+  const [bookmarks, setBookmarks] = useState<number[]>([]);
   const [mounted, setMounted] = useState(false);
 
   // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -219,13 +219,13 @@ export default function EventsPage() {
 
   const detailEvent = detailId ? EVENTS.find((e) => e.id === detailId) : null;
 
-  const openDetail = (id) => setDetailId(id);
+  const openDetail = (id: number) => setDetailId(id);
   const closeDetail = () => setDetailId(null);
 
-  const toggleBookmark = (id) =>
+  const toggleBookmark = (id: number) =>
     setBookmarks((prev) => prev.includes(id) ? prev.filter((b) => b !== id) : [...prev, id]);
 
-  const capacityPercent = (ev) => Math.round((ev.registered / ev.capacity) * 100);
+  const capacityPercent = (ev: typeof EVENTS[number]) => Math.round((ev.registered / ev.capacity) * 100);
 
   return (
     <div className="space-y-8 pb-12 max-w-6xl mx-auto">
