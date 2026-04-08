@@ -12,15 +12,14 @@ export default function LoginPage() {
 
   const [phone, setPhone] = useState<string>("");
   const [phoneVerified, setPhoneVerified] = useState<boolean>(false);
-  const [otpSent, setOtpSent] = useState<boolean>(false);
-  const [otpLoading, setOtpLoading] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [showOtpModal, setShowOtpModal] = useState<boolean>(false);
-  const [otpDigits, setOtpDigits] = useState<string[]>(["", "", "", "", "", ""]);
-  const [otpError, setOtpError] = useState<string>("");
-  const [error, setError] = useState<string>("");
-  const [resendTimer, setResendTimer] = useState<number>(0);
-
+  const [, setOtpSent]             = useState<boolean>(false);
+  const [otpLoading, setOtpLoading]       = useState<boolean>(false);
+  const [loading, setLoading]             = useState<boolean>(false);
+  const [showOtpModal, setShowOtpModal]   = useState<boolean>(false);
+  const [otpDigits, setOtpDigits]         = useState<string[]>(["", "", "", "", "", ""]);
+  const [otpError, setOtpError]           = useState<string>("");
+  const [error, setError]                 = useState<string>("");
+  const [resendTimer, setResendTimer]     = useState<number>(0);
 
   useEffect(() => {
     if (resendTimer <= 0) return;
@@ -208,6 +207,7 @@ export default function LoginPage() {
 
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=1305&auto=format&fit=crop"
           alt="Athlete Background"

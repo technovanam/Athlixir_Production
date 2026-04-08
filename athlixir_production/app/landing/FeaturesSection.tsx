@@ -120,6 +120,7 @@ const Features = () => {
 
                     {/* Preview Element */}
                     <div className="relative w-full aspect-[4/3] lg:aspect-auto lg:flex-grow rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 group min-h-[300px]">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80"
                             alt="Future Tech"
